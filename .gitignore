@@ -1,3 +1,11 @@
 # Created by .ignore support plugin (hsz.mobi)
+# The file containing environment variables
+.env
+
+# Ignore IDE specific files
 .idea
+.idea/
+/.idea/
+.vscode/
+*.sw*
 
