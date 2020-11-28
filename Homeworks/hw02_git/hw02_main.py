@@ -3,49 +3,47 @@
 
 
 # Function fills a dictionary from the list by separator
-def from_list_to_dict_by_separator(list: list, dict: dict) -> dict:
+def from_list_to_dict_by_separator(my_list: list) -> dict:
     separator = '='
-    for i in range(len(list)):
-        if list[i]:
-            key, value = list[i].split(separator)
-            dict.setdefault(key, value)
-    return dict
+    my_dict = {}
+    for i in range(len(my_list)):
+        if my_list[i]:
+            key, value = my_list[i].split(separator)
+            my_dict.setdefault(key, value)
+    return my_dict
 
 
 # Function parses url and return dictionary with parameters for web-server.
 # Parameters are the list of couples key/value, which separated by symbol &.
 def parse(query: str) -> dict:
-    dict_of_parameters = {}
+    list_of_parameters = []
     string_of_parameters = query.partition('?')
-    if string_of_parameters[1] and string_of_parameters[2]:
-        # check for an anchor in url
-        if string_of_parameters[2].find('#') == -1:
-            list_of_parameters = string_of_parameters[2].split('&')
-            from_list_to_dict_by_separator(list_of_parameters, dict_of_parameters)
-        else:
-            # detach the anchor and split the parameters
-            list_of_parameters = string_of_parameters[2].split('#')[0].split('&')
-            from_list_to_dict_by_separator(list_of_parameters, dict_of_parameters)
+    if string_of_parameters[1] and string_of_parameters[2] == -1:
+        list_of_parameters = string_of_parameters[2].split('&')
+    elif string_of_parameters[2] != -1:
+        # detach the anchor and split the parameters
+        list_of_parameters = string_of_parameters[2].split('#')[0].split('&')
     else:
-        return dict_of_parameters
+        pass
+    dict_of_parameters = from_list_to_dict_by_separator(list_of_parameters)
     return dict_of_parameters
 
 
 # Function fills a dictionary from the list by separator on the first occurrence
-def from_list_to_dict_by_separator_first_occurrence(list: list, dict: dict) -> dict:
+def from_list_to_dict_by_separator_first_occurrence(my_list: list) -> dict:
     separator = '='
-    for i in range(len(list)):
-        if list[i]:
-            key, value = list[i].split(separator, 1)
-            dict.setdefault(key, value)
-    return dict
+    my_dict = {}
+    for i in range(len(my_list)):
+        if my_list[i]:
+            key, value = my_list[i].split(separator, 1)
+            my_dict.setdefault(key, value)
+    return my_dict
 
 
 # Function parses string of cookies separated by ';' and return dictionary with cookies
 # where the key is an information before first '=' and value after
 def parse_cookie(query: str) -> dict:
-    dict_of_cookies = {}
-    from_list_to_dict_by_separator_first_occurrence(query.split(';'), dict_of_cookies)
+    dict_of_cookies = from_list_to_dict_by_separator_first_occurrence(query.split(';'))
     return dict_of_cookies
 
 
