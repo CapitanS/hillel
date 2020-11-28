@@ -31,13 +31,30 @@ def parse(query: str) -> dict:
     return dict_of_parameters
 
 
+# Function fills a dictionary from the list by separator on the first occurrence
+def from_list_to_dict_by_separator_first_occurrence(list: list, dict: dict) -> dict:
+    separator = '='
+    for i in range(len(list)):
+        if list[i]:
+            key, value = list[i].split(separator, 1)
+            dict.setdefault(key, value)
+    return dict
+
+
+# Function parses string of cookies separated by ';' and return dictionary with cookies
+# where the key is an information before first '=' and value after
+def parse_cookie(query: str) -> dict:
+    dict_of_cookies = {}
+    from_list_to_dict_by_separator_first_occurrence(query.split(';'), dict_of_cookies)
+    return dict_of_cookies
+
+
 if __name__ == '__main__':
     assert parse('https://example.com/path/to/page?name=ferret&color=purple') == {'name': 'ferret', 'color': 'purple'}
     assert parse('https://example.com/path/to/page?name=ferret&color=purple&') == {'name': 'ferret', 'color': 'purple'}
     assert parse('http://example.com/') == {}
     assert parse('http://example.com/?') == {}
     assert parse('http://example.com/?name=Dima') == {'name': 'Dima'}
-    # New 10 asserts for testing
     assert parse('http://example.com/?name=Dima#') == {'name': 'Dima'}
     assert parse('http://?') == {}
     assert parse('http://example.com/?name=Dima#anchor') == {'name': 'Dima'}
@@ -49,3 +66,17 @@ if __name__ == '__main__':
     assert parse('http://example') == {}
     assert parse('http://example?') == {}
     assert parse('https://example.com/path/to/page/') == {}
+    assert parse_cookie('name=Dima;') == {'name': 'Dima'}
+    assert parse_cookie('') == {}
+    assert parse_cookie('name=Dima;age=28;') == {'name': 'Dima', 'age': '28'}
+    assert parse_cookie('name=Dima=User;age=28;') == {'name': 'Dima=User', 'age': '28'}
+    assert parse_cookie('name=Dima;;age=28') == {'name': 'Dima', 'age': '28'}
+    assert parse_cookie('name=Dima;age=28') == {'name': 'Dima', 'age': '28'}
+    assert parse_cookie('name=Dima;;') == {'name': 'Dima'}
+    assert parse_cookie('name=Dima;age=28;group=3') == {'name': 'Dima', 'age': '28', 'group': '3'}
+    assert parse_cookie('name=') == {'name': ''}
+    assert parse_cookie('=Dima;;') == {'': 'Dima'}
+    assert parse_cookie('=Dima;') == {'': 'Dima'}
+    assert parse_cookie('=') == {'': ''}
+    assert parse_cookie('name=Dima;=;age=28') == {'name': 'Dima', '': '', 'age': '28'}
+    assert parse_cookie('= ') == {'': ' '}
