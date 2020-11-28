@@ -16,7 +16,6 @@ def from_list_to_dict_by_separator_first_occurrence(list: list, dict: dict) -> d
 def parse_cookie(query: str) -> dict:
     dict_of_cookies = {}
     from_list_to_dict_by_separator_first_occurrence(query.split(';'), dict_of_cookies)
-    print(dict_of_cookies)
     return dict_of_cookies
 
 
