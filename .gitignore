@@ -10,3 +10,4 @@
 *.sw*
 
 !/Homeworks/Test/
+!/Lessons/less03_flask/venv/
